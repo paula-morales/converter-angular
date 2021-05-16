@@ -28,7 +28,6 @@ export class HomepageComponent implements OnInit {
     this.isLoading = true;
     this.homepageService.getRates().subscribe(
       (exchangeRate: ExchangeRate) => {
-        console.log('exchange rate is ', exchangeRate);
         this.exchangeRate = exchangeRate;
         this.getAllCurrencies();
         this.initializeValues();
@@ -42,7 +41,6 @@ export class HomepageComponent implements OnInit {
     this.isLoading = true;
     this.homepageService.getRatesByBase(this.sourceCurrency).subscribe(
       (exchangeRate: ExchangeRate) => {
-        console.log('new exchange rate is ', exchangeRate);
         this.exchangeRate = exchangeRate;
         this.getAllCurrencies();
         this.calculateTargetAmount();
@@ -66,35 +64,53 @@ export class HomepageComponent implements OnInit {
   }
 
   calculateTargetAmount() {
-    this.targetAmount =
-      this.sourceAmount * this.exchangeRate.rates[this.targetCurrency];
+    if (this.rateExists()) {
+      const newTargetAmount =
+        this.sourceAmount * this.exchangeRate.rates[this.targetCurrency];
+      this.targetAmount = this.setFourDecimalPlaces(newTargetAmount);
+    } else if (this.targetCurrency == this.sourceCurrency) {
+      this.targetAmount = this.sourceAmount;
+    } else {
+      this.errorMessage = 'Something went wrong';
+    }
+  }
+
+  rateExists(): boolean {
+    return this.exchangeRate.rates[this.targetCurrency];
+  }
+
+  setFourDecimalPlaces(amount: number) {
+    return Number(amount.toFixed(4));
   }
 
   updateSourceCurrency(currencySelected: string) {
     this.sourceCurrency = currencySelected;
-    console.log('new currency source', currencySelected);
     this.getRatesByBase();
   }
 
   updateTargetCurrency(currencySelected: string) {
-    console.log('new currency target', currencySelected);
     this.targetCurrency = currencySelected;
     this.calculateTargetAmount();
   }
 
   updateSourceAmount(newSourceAmount: number) {
-    console.log('new source amount ', newSourceAmount);
     this.sourceAmount = newSourceAmount;
     this.calculateTargetAmount();
   }
 
   calculateSourceAmount() {
-    this.sourceAmount =
-      this.targetAmount / this.exchangeRate.rates[this.targetCurrency];
+    if (this.rateExists()) {
+      const newSourceAmount =
+        this.targetAmount / this.exchangeRate.rates[this.targetCurrency];
+      this.sourceAmount = this.setFourDecimalPlaces(newSourceAmount);
+    } else if (this.targetCurrency == this.sourceCurrency) {
+      this.sourceAmount = this.targetAmount;
+    } else {
+      this.errorMessage = 'Something went wrong';
+    }
   }
 
   updateTargetAmount(newTargetAmount: number) {
-    console.log('new Target amount ', newTargetAmount);
     this.targetAmount = newTargetAmount;
     this.calculateSourceAmount();
   }
