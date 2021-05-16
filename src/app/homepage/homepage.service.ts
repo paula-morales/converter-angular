@@ -12,7 +12,11 @@ export class HomepageService {
 
   constructor(private http: HttpClient) {}
 
-  getRates(base: string): Observable<ExchangeRate> {
+  getRatesByBase(base: string): Observable<ExchangeRate> {
     return this.http.get<ExchangeRate>(`${this.apiUrl}?base=${base}`);
+  }
+
+  getRates(): Observable<ExchangeRate> {
+    return this.http.get<ExchangeRate>(this.apiUrl);
   }
 }

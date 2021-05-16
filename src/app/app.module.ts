@@ -7,10 +7,11 @@ import { HomepageService } from './homepage/homepage.service';
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { BlockCurrencyComponent } from './homepage/block-currency/block-currency.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, HomepageComponent, BlockCurrencyComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [HomepageService],
   bootstrap: [AppComponent],
 })

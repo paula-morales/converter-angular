@@ -1,3 +1,8 @@
 .box-container {
   border: 1px solid black;
 }
+
+select {
+  outline: none;
+  cursor: pointer;
+}

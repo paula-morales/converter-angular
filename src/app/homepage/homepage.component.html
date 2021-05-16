@@ -14,7 +14,13 @@
 
     <div class="col-12 px-0 flex-wrap d-flex justify-content-between mt-4">
       <div class="col-5 px-0">
-        <block-currency [currency]="sourceCurrency"></block-currency>
+        <block-currency
+          [currency]="sourceCurrency"
+          [amount]="sourceAmount"
+          [allCurrencies]="allCurrencies"
+          (currencyChanged)="updateSourceCurrency($event)"
+          (amountChanged)="updateSourceAmount($event)"
+        ></block-currency>
       </div>
 
       <div class="col-2 px-0 d-flex justify-content-center align-items-center">
@@ -27,6 +33,10 @@
         <block-currency
           class="col-5 px-0"
           [currency]="targetCurrency"
+          [amount]="targetAmount"
+          [allCurrencies]="allCurrencies"
+          (currencyChanged)="updateTargetCurrency($event)"
+          (amountChanged)="updateTargetAmount($event)"
         ></block-currency>
       </div>
     </div>
