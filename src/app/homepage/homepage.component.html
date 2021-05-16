@@ -23,8 +23,8 @@
         ></block-currency>
       </div>
 
-      <div class="col-2 px-0 d-flex justify-content-center align-items-center">
-        <div class="swap p-3">
+      <div class="col-2 px-0 d-flex justify-content-center">
+        <div class="swap p-3" style="height: 57px">
           <img src="../../assets/icon_swap_white.svg" style="height: 25px" />
         </div>
       </div>
@@ -40,5 +40,8 @@
         ></block-currency>
       </div>
     </div>
+
+    <div class="mt-3 text-center" *ngIf="isLoading">Loading...</div>
+    <div class="mt-3 text-center">{{ errorMessage }}</div>
   </div>
 </div>

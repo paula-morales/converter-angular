@@ -11,7 +11,9 @@ export class BlockCurrencyComponent implements OnInit {
   @Input() allCurrencies: string[];
 
   @Output() currencyChanged: EventEmitter<string> = new EventEmitter();
-  @Output() amountChanged: EventEmitter<any> = new EventEmitter();
+  @Output() amountChanged: EventEmitter<number> = new EventEmitter();
+
+  message: string;
 
   constructor() {}
 
@@ -20,5 +22,14 @@ export class BlockCurrencyComponent implements OnInit {
   selectCurrency(event: any) {
     const currencySelected = event.target.value;
     this.currencyChanged.emit(currencySelected);
+  }
+
+  onChangeAmount(newAmount: number) {
+    if (newAmount > 0) {
+      this.amountChanged.emit(newAmount);
+      this.message = '';
+    } else {
+      this.message = 'Amount should be greater than 0';
+    }
   }
 }

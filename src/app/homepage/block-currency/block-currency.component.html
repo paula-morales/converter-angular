@@ -1,15 +1,21 @@
 <div class="col-12 px-0">
   <div class="row mx-0">
-    <select
-      class="p-3"
-      (change)="selectCurrency($event)"
-      [(ngModel)]="currency"
-    >
+    <select (change)="selectCurrency($event)" [(ngModel)]="currency">
       <option [value]="currency" hidden>{{ currency }}</option>
       <option *ngFor="let curr of allCurrencies" [value]="curr">
         {{ curr }}
       </option>
     </select>
   </div>
-  <div class="row mx-0 px-4 py-3 box-container mt-2">$ {{ amount }}</div>
+  <div class="row mx-0 mt-2 justify-content-between align-items-center">
+    <input
+      class="form-control"
+      type="number"
+      min="1"
+      [(ngModel)]="amount"
+      (ngModelChange)="onChangeAmount($event)"
+    />
+  </div>
+
+  <div class="text-danger mt-2">{{ message }}</div>
 </div>
