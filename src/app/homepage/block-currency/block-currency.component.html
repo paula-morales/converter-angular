@@ -1,7 +1,6 @@
 <div class="col-12 px-0">
   <div class="row mx-0">
     <select (change)="selectCurrency($event)" [(ngModel)]="currency">
-      <option [value]="currency" hidden>{{ currency }}</option>
       <option *ngFor="let curr of allCurrencies" [value]="curr">
         {{ curr }}
       </option>

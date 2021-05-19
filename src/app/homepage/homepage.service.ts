@@ -8,12 +8,13 @@ import { ExchangeRate } from './models/exchangeRate';
   providedIn: 'root',
 })
 export class HomepageService {
-  apiUrl: string = 'https://api.ratesapi.io/api/latest';
+  apiUrl: string =
+    'https://api.exchangeratesapi.io/v1/latest?access_key=399965e0b37f7fffcf90f4940ce11448';
 
   constructor(private http: HttpClient) {}
 
   getRatesByBase(base: string): Observable<ExchangeRate> {
-    return this.http.get<ExchangeRate>(`${this.apiUrl}?base=${base}`);
+    return this.http.get<ExchangeRate>(`${this.apiUrl}&base=${base}`);
   }
 
   getRates(): Observable<ExchangeRate> {

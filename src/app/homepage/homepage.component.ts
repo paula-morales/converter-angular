@@ -51,9 +51,7 @@ export class HomepageComponent implements OnInit {
   }
 
   getAllCurrencies() {
-    this.allCurrencies = Object.keys(this.exchangeRate.rates).sort((a, b) =>
-      a.localeCompare(b)
-    );
+    this.allCurrencies = Object.keys(this.exchangeRate.rates);
   }
 
   initializeValues() {
