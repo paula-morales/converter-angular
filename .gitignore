@@ -39,6 +39,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/.angular/cache
 
 # System Files
 .DS_Store
@@ -50,3 +51,4 @@ firebase.json
 .firebase
 
 /src/app/config/config.ts
+.angular/cache
