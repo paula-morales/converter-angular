@@ -1,4 +1,22 @@
-.swap {
-  background-color: red;
-  border-radius: 5px;
+.homepage__symbol-converter-swap {
+  background-color: #0099ff;
+  border-radius: 2px;
+  color: white;
+  height: fit-content;
+  font-size: 2rem;
+}
+
+svg {
+  position: absolute;
+  bottom: 0;
+}
+
+.homepage__currency-wrapper,
+.homepage__messages {
+  position: relative;
+  z-index: 1;
+}
+
+.homepage__subtitle {
+  height: 40px;
 }

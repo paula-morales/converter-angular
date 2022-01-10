@@ -1,11 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { HomepageService } from './homepage.service';
-import { ExchangeRate } from './models/exchangeRate';
+import { ExchangeRate } from './models/ExchangeRate';
+import { DataQuery } from './models/dataQuery';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition('*=>*', [
+        style({ opacity: 0.7, fontSize: '110%' }),
+        animate(500),
+      ]),
+    ]),
+  ],
 })
 export class HomepageComponent implements OnInit {
   sourceCurrency: string;
@@ -14,67 +30,58 @@ export class HomepageComponent implements OnInit {
   sourceAmount: number;
   targetAmount: number;
   allCurrencies: string[];
-
   isLoading: boolean;
   errorMessage: string;
 
   constructor(private homepageService: HomepageService) {}
 
   ngOnInit(): void {
+    this.initValues();
     this.getRates();
+  }
+
+  initValues() {
+    this.sourceCurrency = 'USD';
+    this.sourceAmount = 1;
+    this.targetCurrency = 'EUR';
   }
 
   getRates() {
     this.isLoading = true;
-    this.homepageService.getRates().subscribe(
-      (exchangeRate: ExchangeRate) => {
-        this.exchangeRate = exchangeRate;
-        this.getAllCurrencies();
-        this.initializeValues();
-        this.stopLoading();
-      },
-      (error) => this.setError()
-    );
-  }
-
-  getRatesByBase() {
-    this.isLoading = true;
     this.homepageService.getRatesByBase(this.sourceCurrency).subscribe(
-      (exchangeRate: ExchangeRate) => {
-        this.exchangeRate = exchangeRate;
-        this.getAllCurrencies();
+      (dataQuery: DataQuery) => {
+        this.exchangeRate = dataQuery.data;
+
+        //the source currency is not included in response of API so we add it
+        this.exchangeRate[this.sourceCurrency] = 1;
+
+        if (!this.allCurrencies) this.getAllCurrencies();
         this.calculateTargetAmount();
         this.stopLoading();
       },
-      (error) => this.setError()
+      () => this.setErrorStatus()
     );
   }
 
   getAllCurrencies() {
-    this.allCurrencies = Object.keys(this.exchangeRate.rates);
-  }
-
-  initializeValues() {
-    this.sourceCurrency = this.exchangeRate.base;
-    this.sourceAmount = 1;
-    this.targetCurrency = this.allCurrencies[0];
-    this.calculateTargetAmount();
+    this.allCurrencies = Object.keys(this.exchangeRate).sort((a, b) =>
+      a.localeCompare(b)
+    );
   }
 
   calculateTargetAmount() {
     if (this.rateExists()) {
       const newTargetAmount =
-        this.sourceAmount * this.exchangeRate.rates[this.targetCurrency];
+        this.sourceAmount * this.exchangeRate[this.targetCurrency];
       this.targetAmount = this.setFourDecimalPlaces(newTargetAmount);
-    } else if (this.targetCurrency == this.sourceCurrency) {
-      this.targetAmount = this.sourceAmount;
+      this.setErrorMessage(false);
     } else {
-      this.errorMessage = 'Something went wrong';
+      this.setErrorMessage(true);
     }
   }
 
-  rateExists(): boolean {
-    return this.exchangeRate.rates[this.targetCurrency];
+  rateExists() {
+    return this.exchangeRate[this.targetCurrency];
   }
 
   setFourDecimalPlaces(amount: number) {
@@ -83,7 +90,7 @@ export class HomepageComponent implements OnInit {
 
   updateSourceCurrency(currencySelected: string) {
     this.sourceCurrency = currencySelected;
-    this.getRatesByBase();
+    this.getRates();
   }
 
   updateTargetCurrency(currencySelected: string) {
@@ -99,12 +106,11 @@ export class HomepageComponent implements OnInit {
   calculateSourceAmount() {
     if (this.rateExists()) {
       const newSourceAmount =
-        this.targetAmount / this.exchangeRate.rates[this.targetCurrency];
+        this.targetAmount / this.exchangeRate[this.targetCurrency];
       this.sourceAmount = this.setFourDecimalPlaces(newSourceAmount);
-    } else if (this.targetCurrency == this.sourceCurrency) {
-      this.sourceAmount = this.targetAmount;
+      this.setErrorMessage(false);
     } else {
-      this.errorMessage = 'Something went wrong';
+      this.setErrorMessage(true);
     }
   }
 
@@ -115,11 +121,15 @@ export class HomepageComponent implements OnInit {
 
   stopLoading() {
     this.isLoading = false;
-    this.errorMessage = '';
+    this.setErrorMessage(false);
   }
 
-  setError() {
+  setErrorStatus() {
     this.isLoading = false;
-    this.errorMessage = 'Something went wrong';
+    this.setErrorMessage(true);
+  }
+
+  setErrorMessage(isError: boolean) {
+    this.errorMessage = isError ? 'Something went wrong' : '';
   }
 }

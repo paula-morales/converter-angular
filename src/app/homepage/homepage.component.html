@@ -1,19 +1,23 @@
-<div class="col-12 px-0 mt-md-5 mt-2">
-  <div class="col-md-6 col-11 mx-auto">
-    <h1 class="title-homepage text-uppercase text-center">
+<div class="homepage col-12 px-0 pt-md-5 pt-2 h-100">
+  <div class="homepage__title-wrapper col-md-6 col-11 mx-auto">
+    <h1 class="homepage__title text-uppercase text-center">
       Currency converter
     </h1>
-    <h3 class="justify-content-center d-flex align-items-center">
-      <div class="px-2">by</div>
-      <img src="../../assets/adyen-logo.png" style="height: 40px" />
-    </h3>
 
-    <h2 class="text-center mt-5">
-      {{ sourceCurrency }} to {{ targetCurrency }}
+    <h2 class="homepage__subtitle text-center mt-5">
+      <span class="homepage__currency-span" [@fadeIn]="sourceCurrency">{{
+        sourceCurrency
+      }}</span>
+      to
+      <span class="homepage__currency-span" [@fadeIn]="targetCurrency">{{
+        targetCurrency
+      }}</span>
     </h2>
 
-    <div class="col-12 px-0 flex-wrap d-flex justify-content-between mt-4">
-      <div class="col-4 col-md-5 px-0">
+    <div
+      class="homepage__currency-wrapper col-12 px-0 flex-wrap d-flex justify-content-between mt-4"
+    >
+      <div class="homepage__source-currency-wrapper col-4 col-md-5 px-0">
         <block-currency
           [currency]="sourceCurrency"
           [amount]="sourceAmount"
@@ -23,13 +27,14 @@
         ></block-currency>
       </div>
 
-      <div class="col-2 px-0 d-flex justify-content-center">
-        <div class="swap p-3" style="height: 57px">
-          <img src="../../assets/icon_swap_white.svg" style="height: 25px" />
-        </div>
+      <div
+        class="homepage__symbol-converter col-2 px-0 d-flex justify-content-center"
+        aria-hidden="true"
+      >
+        <p class="homepage__symbol-converter-swap px-3">=</p>
       </div>
 
-      <div class="col-4 col-md-5 px-0">
+      <div class="homepage__target-currency-wrapper col-4 col-md-5 px-0">
         <block-currency
           [currency]="targetCurrency"
           [amount]="targetAmount"
@@ -39,8 +44,21 @@
         ></block-currency>
       </div>
     </div>
-
-    <div class="mt-3 text-center" *ngIf="isLoading">Loading...</div>
-    <div class="mt-3 text-center">{{ errorMessage }}</div>
+    <span class="homepage__messages">
+      <p class="homepage__loading-message mt-3 text-center" *ngIf="isLoading">
+        Loading...
+      </p>
+      <p class="homepage__error-message mt-3 text-center">
+        {{ errorMessage }}
+      </p>
+    </span>
   </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path
+      fill="#0099ff"
+      fill-opacity="0.9"
+      d="M0,96L26.7,85.3C53.3,75,107,53,160,58.7C213.3,64,267,96,320,96C373.3,96,427,64,480,74.7C533.3,85,587,139,640,165.3C693.3,192,747,192,800,176C853.3,160,907,128,960,122.7C1013.3,117,1067,139,1120,149.3C1173.3,160,1227,160,1280,133.3C1333.3,107,1387,53,1413,26.7L1440,0L1440,320L1413.3,320C1386.7,320,1333,320,1280,320C1226.7,320,1173,320,1120,320C1066.7,320,1013,320,960,320C906.7,320,853,320,800,320C746.7,320,693,320,640,320C586.7,320,533,320,480,320C426.7,320,373,320,320,320C266.7,320,213,320,160,320C106.7,320,53,320,27,320L0,320Z"
+    ></path>
+  </svg>
 </div>

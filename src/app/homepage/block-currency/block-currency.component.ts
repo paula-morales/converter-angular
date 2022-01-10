@@ -1,11 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'block-currency',
   templateUrl: './block-currency.component.html',
   styleUrls: ['./block-currency.component.css'],
 })
-export class BlockCurrencyComponent implements OnInit {
+export class BlockCurrencyComponent implements OnInit, OnChanges {
   @Input() currency: string;
   @Input() amount: number;
   @Input() allCurrencies: string[];
@@ -19,6 +27,12 @@ export class BlockCurrencyComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.amount && changes.amount.currentValue > 0) {
+      this.message = '';
+    }
+  }
+
   selectCurrency(event: any) {
     const currencySelected = event.target.value;
     this.currencyChanged.emit(currencySelected);
@@ -29,7 +43,7 @@ export class BlockCurrencyComponent implements OnInit {
       this.amountChanged.emit(newAmount);
       this.message = '';
     } else {
-      this.message = 'Amount should be greater than 0';
+      this.message = 'Amount should be a number greater than 0';
     }
   }
 }

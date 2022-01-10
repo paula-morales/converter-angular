@@ -1,14 +1,24 @@
-<div class="col-12 px-0">
-  <div class="row mx-0">
-    <select (change)="selectCurrency($event)" [(ngModel)]="currency">
-      <option *ngFor="let curr of allCurrencies" [value]="curr">
+<div class="block-currency col-12 px-0">
+  <div class="block-currency__dropdown-wrapper row mx-0">
+    <select
+      class="block-currency__dropdown form-select"
+      (change)="selectCurrency($event)"
+      [(ngModel)]="currency"
+    >
+      <option
+        *ngFor="let curr of allCurrencies"
+        [value]="curr"
+        class="block-currency__dropdown-option"
+      >
         {{ curr }}
       </option>
     </select>
   </div>
-  <div class="row mx-0 mt-2 justify-content-between align-items-center">
+  <div
+    class="block-currency__input-wrapper row mx-0 mt-2 justify-content-between align-items-center"
+  >
     <input
-      class="form-control"
+      class="block-currency__input form-control"
       type="number"
       min="1"
       [(ngModel)]="amount"
@@ -16,5 +26,5 @@
     />
   </div>
 
-  <div class="text-danger mt-2">{{ message }}</div>
+  <div class="block-currency__message text-danger mt-2">{{ message }}</div>
 </div>
